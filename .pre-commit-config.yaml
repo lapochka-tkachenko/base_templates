@@ -1,0 +1,36 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        entry: ruff check --fix --config=code_quality/.ruff.toml
+        language: system
+        types: [python]
+
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format --config=code_quality/.ruff.toml
+        language: system
+        types: [python]
+
+      - id: mypy
+        name: mypy
+        entry: mypy --config-file=code_quality/mypy.ini apps/
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: pylint
+        name: pylint
+        entry: pylint --rcfile=code_quality/pylint.toml apps/
+        language: system
+        types: [python]
+        pass_filenames: false
+        verbose: true
+
+      - id: pytest
+        name: pytest
+        entry: pytest tests/ -q
+        language: system
+        types: [python]
+        pass_filenames: false

@@ -1,0 +1,108 @@
+line-length = 99
+indent-width = 4
+target-version = "py312"
+
+
+exclude = [
+    "*/migrations/*",
+    ".venv_comic",
+    "venv_comic",
+    "core/",
+    "tests/",
+    "manage.py",
+]
+force-exclude = true
+
+[format]
+quote-style = "single"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+skip-magic-trailing-comma = false
+
+[lint]
+# see https://docs.astral.sh/ruff/rules/
+select = [
+    "ANN",  # flake8-annotations (type annotations)
+    # pycodestyle (formerly pep8)
+    "E",
+    # Pyflakes (static analysis)
+    "F",
+    # pyupgrade (upgrade syntax)
+    "UP",
+    # flake8-bugbear (additional checks)
+    "B",
+    # flake8-simplify (simplify code)
+    "SIM",
+    # isort (import sorting)
+    "I",
+    # flake8-tidy-imports (clean up imports)
+    "TID",
+    # naming conventions
+    "N",
+    # flake8-bandit (security)
+    "S",
+    # flake8-builtins
+    "A",
+    # flake8-django (Django-specific checks)
+    "DJ",
+    # flake8-errmsg (error message format)
+    "EM",
+    #flake8-pie
+    "PIE",
+    # flake8-print (print statement)
+    "T20",
+    # flake8-debugger
+    "T10",
+    # flake8-codebase investigationreturn (return statement)
+    "RET",
+    # flake8-type-checking (type hints)
+    "TCH",
+    # flake8-use-pathlib
+    "PTH",
+    # flake8-todos
+    "TD",
+    # flake8
+    # "FIX",
+    # flake8-logging-format (logging format)
+    # "G",
+    # eradicat (commented-out code)
+    "ERA",
+    # Pylint (static analysis)
+    "PL",
+    # refactor
+    "R",
+    # warnings
+    "W",
+    # tryceratops (try-except)
+    "TRY",
+    # flynt (f-strings)
+    "FLY",
+    # Perflint (performance)
+    "PERF",
+    # refurb (refactoring)
+    "FURB",
+    # Ruff-specific rules (see https://docs.astral.sh/ruff/rules/)
+    "RUF",
+    # mccabe (complexity check)
+    "C90",
+]
+# extend-select = []
+extend-ignore = [
+    'RUF001', # String contains ambiguous `–` (EN DASH). Did you mean `-` (HYPHEN-MINUS)?
+    'RUF003', # Comment contains ambiguous `–` (EN DASH). Did you mean `-` (HYPHEN-MINUS)?
+    'RUF012', # Mutable class attributes should be annotated with `typing.ClassVar`
+    'RET504', # Checks for variable assignments that immediately precede a return of the assigned variable.
+    'PLC0415', # `import` should be at the top-level of a file
+    'ANN401', # Any annotation
+    'ANN001', # Missing type annotation for self in method
+    'UP046', # Generic class uses `Generic` subclass instead of type parameters (PEP 695)
+]
+
+[lint.per-file-ignores]
+"tests/**/*.py" = [
+    "ANN",      # No type annotations required for tests
+    "S101",     # Allow assert statements
+    "S106",     # Allow hardcoded passwords in test fixtures
+    "PLR0913",  # Allow many function arguments
+    "PLR2004",  # Allow magic values in comparisons
+]
