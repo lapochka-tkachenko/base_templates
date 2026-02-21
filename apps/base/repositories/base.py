@@ -3,7 +3,8 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING, Any
 
-from apps.base.constants import _NOT_STARTED_MSG
+from apps.base.decorators import handle_playwright_errors
+from apps.base.exceptions import BrowserNotStartedError
 from apps.base.repositories.abstract import AbstractBrowserRepository
 from apps.base.repositories.container import BaseContainer
 from core.settings import COOKIES_DIR
@@ -23,6 +24,7 @@ class BasePlaywrightRepository(AbstractBrowserRepository):
 
     def __init__(
         self,
+        *,
         headless: bool = True,
         slow_mo: float = 0,
         timeout: float = 30_000,
@@ -52,14 +54,14 @@ class BasePlaywrightRepository(AbstractBrowserRepository):
     def page(self) -> Page:
         """Return the current page, raise if not started."""
         if self._page is None:
-            raise RuntimeError(_NOT_STARTED_MSG)
+            raise BrowserNotStartedError
         return self._page
 
     @property
     def context(self) -> BrowserContext:
         """Return the current browser context, raise if not started."""
         if self._context is None:
-            raise RuntimeError(_NOT_STARTED_MSG)
+            raise BrowserNotStartedError
         return self._context
 
     @property
@@ -67,40 +69,46 @@ class BasePlaywrightRepository(AbstractBrowserRepository):
         """Return the shared browser from the container, raise if not started."""
         browser = BaseContainer().browser
         if browser is None:
-            raise RuntimeError(_NOT_STARTED_MSG)
+            raise BrowserNotStartedError
         return browser
 
-    async def navigate(self, url: str, wait_until: str = 'networkidle') -> None:
+    @handle_playwright_errors
+    async def navigate(self, *, url: str, wait_until: str = 'networkidle') -> None:
         """Navigate to url."""
         await self.page.goto(url, wait_until=wait_until)  # type: ignore[arg-type]
 
-    async def screenshot(self, path: str) -> None:
+    @handle_playwright_errors
+    async def screenshot(self, *, path: str) -> None:
         """Take a full-page screenshot and save to path."""
         await self.page.screenshot(path=path, full_page=True)
 
-    async def wait_for_selector(self, selector: str, timeout: float | None = None) -> None:
+    @handle_playwright_errors
+    async def wait_for_selector(self, *, selector: str, timeout: float | None = None) -> None:
         """Wait until selector appears on the page."""
         await self.page.wait_for_selector(selector, timeout=timeout or self.timeout)
 
-    async def fill(self, selector: str, value: str) -> None:
+    @handle_playwright_errors
+    async def fill(self, *, selector: str, value: str) -> None:
         """Fill input field."""
         await self.page.fill(selector, value)
 
-    async def click(self, selector: str) -> None:
+    @handle_playwright_errors
+    async def click(self, *, selector: str) -> None:
         """Click element."""
         await self.page.click(selector)
 
-    async def get_text(self, selector: str) -> str:
+    @handle_playwright_errors
+    async def get_text(self, *, selector: str) -> str:
         """Return inner text of element."""
         return await self.page.inner_text(selector)
 
-    async def save_cookies(self, username: str) -> None:
+    async def save_cookies(self, *, username: str) -> None:
         """Save current browser cookies to cookies/<username>.json."""
         COOKIES_DIR.mkdir(exist_ok=True)
         cookies = await self.context.cookies()
         (COOKIES_DIR / f'{username}.json').write_text(json.dumps(cookies))
 
-    async def load_cookies(self, username: str) -> bool:
+    async def load_cookies(self, *, username: str) -> bool:
         """Load cookies from cookies/<username>.json into browser context.
 
         Returns True if the file existed and cookies were applied, False otherwise.

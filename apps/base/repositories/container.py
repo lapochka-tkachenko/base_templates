@@ -25,7 +25,7 @@ class BaseContainer:
         """Return the current browser instance or None if not started."""
         return self._browser
 
-    async def get_browser(self, headless: bool = True, slow_mo: float = 0) -> Browser:
+    async def get_browser(self, *, headless: bool = True, slow_mo: float = 0) -> Browser:
         """Return the shared browser, launching it on first call."""
         if self._lock is None:
             self._lock = asyncio.Lock()

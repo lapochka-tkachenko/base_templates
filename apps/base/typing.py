@@ -1,7 +1,9 @@
-from typing import TYPE_CHECKING, TypeVar
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, TypeVar
 
 if TYPE_CHECKING:
-    from apps.base.schema import BaseSchema
+    from apps.base.dto import BaseDTO
 
 
-TSchema = TypeVar('TSchema', bound='BaseSchema')
+TDTO = TypeVar('TDTO', bound='BaseDTO')
+AnyCallable = TypeVar('AnyCallable', bound=Callable[..., Any])

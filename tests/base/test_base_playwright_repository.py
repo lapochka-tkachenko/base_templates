@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
+from apps.base.exceptions import BrowserNotStartedError
 from apps.base.repositories.base import BasePlaywrightRepository
 from apps.base.repositories.container import BaseContainer
 
@@ -125,19 +126,19 @@ async def test_close_does_not_stop_browser():
 
 def test_page_raises_before_start():
     repo = ConcreteRepository()
-    with pytest.raises(RuntimeError, match="not started"):
+    with pytest.raises(BrowserNotStartedError):
         _ = repo.page
 
 
 def test_context_raises_before_start():
     repo = ConcreteRepository()
-    with pytest.raises(RuntimeError, match="not started"):
+    with pytest.raises(BrowserNotStartedError):
         _ = repo.context
 
 
 def test_browser_raises_before_start():
     repo = ConcreteRepository()
-    with pytest.raises(RuntimeError, match="not started"):
+    with pytest.raises(BrowserNotStartedError):
         _ = repo.browser
 
 
@@ -153,7 +154,7 @@ async def test_navigate_calls_goto():
         mock_pw.return_value.start = AsyncMock(return_value=playwright)
 
         async with ConcreteRepository() as repo:
-            await repo.navigate("https://example.com")
+            await repo.navigate(url="https://example.com")
             page.goto.assert_awaited_once_with("https://example.com", wait_until="networkidle")
 
 
@@ -165,7 +166,7 @@ async def test_fill_calls_page_fill():
         mock_pw.return_value.start = AsyncMock(return_value=playwright)
 
         async with ConcreteRepository() as repo:
-            await repo.fill("#input", "hello")
+            await repo.fill(selector="#input", value="hello")
             page.fill.assert_awaited_once_with("#input", "hello")
 
 
@@ -177,7 +178,7 @@ async def test_click_calls_page_click():
         mock_pw.return_value.start = AsyncMock(return_value=playwright)
 
         async with ConcreteRepository() as repo:
-            await repo.click("button#submit")
+            await repo.click(selector="button#submit")
             page.click.assert_awaited_once_with("button#submit")
 
 
@@ -190,7 +191,7 @@ async def test_get_text_returns_inner_text():
         mock_pw.return_value.start = AsyncMock(return_value=playwright)
 
         async with ConcreteRepository() as repo:
-            result = await repo.get_text("h1")
+            result = await repo.get_text(selector="h1")
             assert result == "Hello World"
 
 
@@ -202,5 +203,5 @@ async def test_screenshot_calls_page_screenshot():
         mock_pw.return_value.start = AsyncMock(return_value=playwright)
 
         async with ConcreteRepository() as repo:
-            await repo.screenshot("/tmp/screen.png")
+            await repo.screenshot(path="/tmp/screen.png")
             page.screenshot.assert_awaited_once_with(path="/tmp/screen.png", full_page=True)
