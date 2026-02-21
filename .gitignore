@@ -208,3 +208,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 /todo
+
+# Browser session cookies (contain sensitive auth data)
+/cookies/

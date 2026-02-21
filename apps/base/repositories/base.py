@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import json
 from typing import TYPE_CHECKING, Any
 
 from apps.base.constants import _NOT_STARTED_MSG
 from apps.base.repositories.abstract import AbstractBrowserRepository
 from apps.base.repositories.container import BaseContainer
+from core.settings import COOKIES_DIR
 
 if TYPE_CHECKING:
     from playwright.async_api import Browser, BrowserContext, Page
@@ -91,6 +93,24 @@ class BasePlaywrightRepository(AbstractBrowserRepository):
     async def get_text(self, selector: str) -> str:
         """Return inner text of element."""
         return await self.page.inner_text(selector)
+
+    async def save_cookies(self, username: str) -> None:
+        """Save current browser cookies to cookies/<username>.json."""
+        COOKIES_DIR.mkdir(exist_ok=True)
+        cookies = await self.context.cookies()
+        (COOKIES_DIR / f'{username}.json').write_text(json.dumps(cookies))
+
+    async def load_cookies(self, username: str) -> bool:
+        """Load cookies from cookies/<username>.json into browser context.
+
+        Returns True if the file existed and cookies were applied, False otherwise.
+        """
+        path = COOKIES_DIR / f'{username}.json'
+        if not path.exists():
+            return False
+        cookies = json.loads(path.read_text())
+        await self.context.add_cookies(cookies)
+        return True
 
     async def run(self) -> Any:
         """Entry point for concrete repository logic."""
