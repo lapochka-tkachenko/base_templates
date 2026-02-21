@@ -2,6 +2,21 @@
 
 A **starter template** for Python backend projects. Clone it, rename it, and start building — all the boilerplate for code quality, testing, and logging is already configured.
 
+## Branch structure
+
+This repository uses a **branch-per-template** approach. Each branch is a ready-to-use starting point for a specific stack. The `main` branch is the base — it contains shared config (linting, CI, logging) that all other branches build on top of.
+
+| Branch       | Description                        |
+|--------------|------------------------------------|
+| `main`       | Base template (this branch)        |
+| `playwright` | Base + Playwright E2E test setup   |
+
+To start a new project from a specific template:
+
+```bash
+git clone -b playwright <repo-url> my-project
+```
+
 ## What's included
 
 - **Linting & formatting** — ruff, pylint
