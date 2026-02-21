@@ -45,9 +45,9 @@ class AbstractBrowserRepository(ABC):
         """Return inner text of element."""
 
     @abstractmethod
-    async def save_cookies(self, user_id: str) -> None:
-        """Save current browser cookies to a JSON file keyed by user_id."""
+    async def save_cookies(self, username: str) -> None:
+        """Save current browser cookies to a JSON file keyed by username."""
 
     @abstractmethod
-    async def load_cookies(self, user_id: str) -> bool:
+    async def load_cookies(self, username: str) -> bool:
         """Load cookies from JSON file into browser context. Returns True if file exists."""
