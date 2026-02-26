@@ -9,42 +9,61 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v5
         with:
+          enable-cache: true
           python-version: "3.13"
-      - run: pip install ruff==0.15.2
-      - run: ruff check --config=code_quality/.ruff.toml apps/
-      - run: ruff format --check --config=code_quality/.ruff.toml apps/
+      - name: Install dependencies
+        run: uv sync
+      - name: Run Ruff check
+        run: uv run ruff check --config=code_quality/.ruff.toml apps/
+      - name: Run Ruff format
+        run: uv run ruff format --check --config=code_quality/.ruff.toml apps/
 
   mypy:
     name: mypy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v5
         with:
+          enable-cache: true
           python-version: "3.13"
-      - run: pip install -r requirements/requirements_dev
-      - run: mypy --config-file=code_quality/mypy.ini apps/
+      - name: Install dependencies
+        run: uv sync
+      - name: Run Mypy
+        run: uv run mypy --config-file=code_quality/mypy.ini apps/
 
   pylint:
     name: pylint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v5
         with:
+          enable-cache: true
           python-version: "3.13"
-      - run: pip install -r requirements/requirements_dev
-      - run: pylint --rcfile=code_quality/pylint.toml apps/
+      - name: Install dependencies
+        run: uv sync
+      - name: Run Pylint
+        run: uv run pylint --rcfile=code_quality/pylint.toml apps/
 
   pytest:
     name: pytest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v5
         with:
+          enable-cache: true
           python-version: "3.13"
-      - run: pip install -r requirements/requirements_dev
-      - run: pytest tests/ -q
+      - name: Install dependencies
+        run: uv sync
+      - name: Install Playwright Browsers (Required for tests)
+        run: uv run playwright install --with-deps
+      - name: Run Pytest
+        run: uv run pytest tests/ -q

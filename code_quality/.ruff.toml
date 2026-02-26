@@ -5,8 +5,10 @@ target-version = "py312"
 
 exclude = [
     "*/migrations/*",
-    ".venv_comic",
-    "venv_comic",
+    ".venv",
+    ".venv",
+    ".qodo",
+    "venv",
     "core/",
     "tests/",
     "manage.py",
@@ -20,71 +22,53 @@ docstring-code-line-length = "dynamic"
 skip-magic-trailing-comma = false
 
 [lint]
-# see https://docs.astral.sh/ruff/rules/
 select = [
-    "ANN",  # flake8-annotations (type annotations)
-    # pycodestyle (formerly pep8)
-    "E",
-    # Pyflakes (static analysis)
-    "F",
-    # pyupgrade (upgrade syntax)
-    "UP",
-    # flake8-bugbear (additional checks)
-    "B",
-    # flake8-simplify (simplify code)
-    "SIM",
-    # isort (import sorting)
-    "I",
-    # flake8-tidy-imports (clean up imports)
-    "TID",
-    # naming conventions
-    "N",
-    # flake8-bandit (security)
-    "S",
-    # flake8-builtins
-    "A",
-    # flake8-django (Django-specific checks)
-    "DJ",
-    # flake8-errmsg (error message format)
-    "EM",
-    #flake8-pie
-    "PIE",
-    # flake8-print (print statement)
-    "T20",
-    # flake8-debugger
-    "T10",
-    # flake8-codebase investigationreturn (return statement)
-    "RET",
-    # flake8-type-checking (type hints)
-    "TCH",
-    # flake8-use-pathlib
-    "PTH",
-    # flake8-todos
-    "TD",
-    # flake8
-    # "FIX",
-    # flake8-logging-format (logging format)
-    # "G",
-    # eradicat (commented-out code)
-    "ERA",
-    # Pylint (static analysis)
-    "PL",
-    # refactor
-    "R",
-    # warnings
-    "W",
-    # tryceratops (try-except)
-    "TRY",
-    # flynt (f-strings)
-    "FLY",
-    # Perflint (performance)
-    "PERF",
-    # refurb (refactoring)
-    "FURB",
-    # Ruff-specific rules (see https://docs.astral.sh/ruff/rules/)
-    "RUF",
-    # mccabe (complexity check)
-    "C90",
+    "ANN",  # flake8-annotations
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "I",    # isort
+    "TID",  # flake8-tidy-imports
+    "N",    # naming conventions
+    "S",    # flake8-bandit
+    "A",    # flake8-builtins
+    "DJ",   # flake8-django
+    "EM",   # flake8-errmsg
+    "PIE",  # flake8-pie
+    "T20",  # flake8-print
+    "T10",  # flake8-debugger
+    "RET",  # flake8-return
+    "TCH",  # flake8-type-checking
+    "PTH",  # flake8-use-pathlib
+    "TD",   # flake8-todos
+    "ERA",  # eradicate
+    "PL",   # pylint
+    "R",    # refactor
+    "W",    # warnings
+    "TRY",  # tryceratops
+    "FLY",  # flynt
+    "PERF", # perflint
+    "FURB", # refurb
+    "RUF",  # ruff
+    "C90",  # mccabe
+    "C4",   # flake8-comprehensions
+    "COM",  # flake8-commas
+    "D",    # pydocstyle
+    "DTZ",  # flake8-datetimez
+    "EXE",  # flake8-executable
+    "FBT",  # flake8-boolean-trap
+    "G",    # flake8-logging-format
+    "ICN",  # flake8-import-conventions
+    "ISC",  # flake8-implicit-str-concat
+    "LOG",  # flake8-logging
+    "PT",   # flake8-pytest-style
+    "Q",    # flake8-quotes
+    "RSE",  # flake8-raise
+    "SLF",  # flake8-self
+    "SLOT", # flake8-slots
+    "YTT",  # flake8-2020
 ]
 # extend-select = []
 extend-ignore = [
@@ -96,6 +80,24 @@ extend-ignore = [
     'ANN401', # Any annotation
     'ANN001', # Missing type annotation for self in method
     'UP046', # Generic class uses `Generic` subclass instead of type parameters (PEP 695)
+    "S101", # asserts
+    "D100", # Docstring in a public module
+    "D101", # Docstring in a public class
+    "D102", # Docstring in a public method
+    "D103", # Docstring in a public method
+    "D104", # Docstring in a public package
+    "S105", # hardcoded passwords
+    "S404", # subprocess calls are for tests
+    "S603", # do not require `shell=True`
+    "S607", # partial executable paths
+    "PT012", # simple statement in pytest.raises block
+    "S106", # hardcoded assigned values
+    "D203", # blank line before class
+    "D213", # multi-line summary in docstring
+    "COM812", # comma formatting conflicts with formatter
+    "Q000", # quote style conflicts with formatter
+    "Q003", # mixed quotes conflicts with formatter
+    "PLR2004" # magic value, for status codes
 ]
 
 [lint.per-file-ignores]
@@ -105,4 +107,34 @@ extend-ignore = [
     "S106",     # Allow hardcoded passwords in test fixtures
     "PLR0913",  # Allow many function arguments
     "PLR2004",  # Allow magic values in comparisons
+    "D100", # Docstring in a public module
+    "D101", # Docstring in a public class
+    "D102", # Docstring in a public method
+    "D103", # Docstring in a public method
+    "D104", # Docstring in a public package
+    "S105", # hardcoded passwords
+    "S404", # subprocess calls are for tests
+    "S603", # do not require `shell=True`
+    "S607", # partial executable paths
+    "PT012", # simple statement in pytest.raises block
+    "D203", # blank line before class
+    "COM812", # comma formatting conflicts with formatter
+    "Q000", # quote style conflicts with formatter
+]
+"**" = [
+    "D100", # Docstring in a public module
+    "D104", # Docstring in a public package
+    "D107", # Docstring in init
+    "D205", # Blank line between summary line and description
+    "D401", # docstring should be in imperative mood
+    "PLE1205", # too many arguments for `logging` format string
+    "TRY301", # Abstract `raise` to an inner function
+    "D213", # Multi-line docstring summary second line
+    "Q003", # flake8-quotes
+]
+
+# Ignore conflictiong rules
+ignore = [
+    "D203", # incorrect-blank-line-before-class (conflict with D211)
+    "D213", # multi-line-summary-second-line (conflict with D212)
 ]
