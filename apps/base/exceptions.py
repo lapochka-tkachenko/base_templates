@@ -15,3 +15,7 @@ class BrowserTimeoutError(BrowserError):
 
 class BrowserPageError(BrowserError):
     """Raised when a Playwright page action fails (element not found, navigation error, etc.)."""
+
+
+class BrowserLaunchError(BrowserError):
+    """Raised when the browser process fails to start."""

@@ -5,8 +5,7 @@ from apps.base.typing import TDTO
 
 
 class BaseDTO:
-    """
-    Base class for dataclass-based DTOs.
+    """Base class for dataclass-based DTOs.
 
     Subclasses should be decorated with @dataclass (slots=True recommended).
     The empty __slots__ here allows subclasses to fully benefit from slots=True

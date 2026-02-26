@@ -1,55 +1,12 @@
 from __future__ import annotations
 
-from typing import Any
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
 from apps.base.exceptions import BrowserNotStartedError
-from apps.base.repositories.base import BasePlaywrightRepository
 from apps.base.repositories.container import BaseContainer
-
-
-# ---------------------------------------------------------------------------
-# Concrete stub
-# ---------------------------------------------------------------------------
-
-class ConcreteRepository(BasePlaywrightRepository):
-    async def run(self) -> Any:
-        return "ok"
-
-
-# ---------------------------------------------------------------------------
-# Fixtures
-# ---------------------------------------------------------------------------
-
-@pytest.fixture(autouse=True)
-def reset_container():
-    """Reset singleton container state between tests."""
-    container = BaseContainer()
-    container._playwright = None
-    container._browser = None
-    container._lock = None
-    yield
-    container._playwright = None
-    container._browser = None
-    container._lock = None
-
-
-def make_mock_browser() -> tuple:
-    """Build a mock playwright/browser/context/page chain."""
-    page = AsyncMock()
-    context = AsyncMock()
-    context.set_default_timeout = MagicMock()  # sync call
-    context.new_page = AsyncMock(return_value=page)
-
-    browser = AsyncMock()
-    browser.new_context = AsyncMock(return_value=context)
-
-    playwright = AsyncMock()
-    playwright.chromium.launch = AsyncMock(return_value=browser)
-
-    return playwright, browser, context, page
+from tests.base.conftest import ConcreteRepository, make_mock_browser
 
 
 # ---------------------------------------------------------------------------
@@ -155,7 +112,7 @@ async def test_navigate_calls_goto():
 
         async with ConcreteRepository() as repo:
             await repo.navigate(url="https://example.com")
-            page.goto.assert_awaited_once_with("https://example.com", wait_until="networkidle")
+            page.goto.assert_awaited_once_with("https://example.com", wait_until="domcontentloaded")
 
 
 @pytest.mark.asyncio
