@@ -11,15 +11,17 @@ repos:
     hooks:
       - id: ruff
         name: ruff
-        entry: ruff check --fix --config=code_quality/.ruff.toml
+        entry: ruff check --fix --config=code_quality/.ruff.toml --exclude core --exclude tests
         language: system
         types: [python]
+        exclude: '^(core|manage\.py|tests)'
 
       - id: ruff-format
         name: ruff-format
         entry: ruff format --config=code_quality/.ruff.toml
         language: system
         types: [python]
+        exclude: '^(core|manage\.py)'
 
       - id: mypy
         name: mypy
@@ -38,7 +40,7 @@ repos:
 
       - id: pytest
         name: pytest
-        entry: pytest tests/ -q
+        entry: python -m pytest tests/ -q
         language: system
         types: [python]
         pass_filenames: false

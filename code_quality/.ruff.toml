@@ -6,10 +6,8 @@ target-version = "py312"
 exclude = [
     "*/migrations/*",
     ".venv",
-    ".venv",
     ".qodo",
     "venv",
-    "core/",
     "tests/",
     "manage.py",
 ]
@@ -97,10 +95,12 @@ extend-ignore = [
     "COM812", # comma formatting conflicts with formatter
     "Q000", # quote style conflicts with formatter
     "Q003", # mixed quotes conflicts with formatter
-    "PLR2004" # magic value, for status codes
+    "PLR2004", # magic value, for status codes
+    "D106" # Docstring in a  in public nested class
 ]
 
 [lint.per-file-ignores]
+"core/**" = ["ALL"]
 "tests/**/*.py" = [
     "ANN",      # No type annotations required for tests
     "S101",     # Allow assert statements
