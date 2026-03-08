@@ -1,6 +1,7 @@
-COMPOSE_DIR = docker_files
+COMPOSE_DIR  = docker_files
 COMPOSE      = docker compose -f $(COMPOSE_DIR)/docker-compose.yml
 COMPOSE_PG   = docker compose -f $(COMPOSE_DIR)/docker-compose.postgres.yml
+COMPOSE_FULL = docker compose -f $(COMPOSE_DIR)/docker-compose.full.yml
 
 # ── Docker ────────────────────────────────────────────────────────────────────
 
@@ -20,9 +21,21 @@ up-pg:
 down-pg:
 	$(COMPOSE_PG) down
 
+.PHONY: up-full
+up-full:
+	$(COMPOSE_FULL) up -d
+
+.PHONY: down-full
+down-full:
+	$(COMPOSE_FULL) down
+
 .PHONY: logs
 logs:
 	$(COMPOSE) logs -f
+
+.PHONY: logs-full
+logs-full:
+	$(COMPOSE_FULL) logs -f
 
 # ── Django ────────────────────────────────────────────────────────────────────
 
@@ -37,6 +50,18 @@ migrations:
 .PHONY: run
 run:
 	python manage.py runserver
+
+.PHONY: worker
+worker:
+	celery -A core worker -l info
+
+.PHONY: beat
+beat:
+	celery -A core beat -l info
+
+.PHONY: flower
+flower:
+	celery -A core flower --port=5555
 
 # ── Code quality ──────────────────────────────────────────────────────────────
 

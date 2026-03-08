@@ -1,0 +1,87 @@
+x-django-env: &django-env
+  DJANGO_SETTINGS_MODULE: core.settings.prod
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+  POSTGRES_DB: ${POSTGRES_DB:-postgres_db}
+  POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+  POSTGRES_HOST: db
+  POSTGRES_PORT: 5432
+  REDIS_URL: redis://redis:6379/0
+  CELERY_BROKER_URL: redis://redis:6379/0
+
+x-django-depends: &django-depends
+  db:
+    condition: service_healthy
+  redis:
+    condition: service_healthy
+
+x-celery-base: &celery-base
+  build:
+    context: ..
+    dockerfile: Dockerfile
+  restart: unless-stopped
+  environment:
+    <<: *django-env
+  depends_on:
+    <<: *django-depends
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-postgres_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      <<: *django-env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ..:/app
+    depends_on:
+      <<: *django-depends
+
+  celery_worker:
+    <<: *celery-base
+    command: celery -A core worker -l info
+
+  celery_beat:
+    <<: *celery-base
+    command: celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+  flower:
+    <<: *celery-base
+    command: celery -A core flower --port=5555
+    ports:
+      - "5555:5555"
+
+volumes:
+  postgres_data:
+  redis_data:
