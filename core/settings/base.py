@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_celery_beat',
     'django_celery_results',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -112,3 +115,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 from core.settings.logger_config import LOGGING  # noqa: F401
 from core.settings.celery import *  # noqa: F401
 from core.settings.redis import *  # noqa: F401
+from core.settings.drf import *  # noqa: F401
+import core.settings.sentry  # noqa: F401

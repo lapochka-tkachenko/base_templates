@@ -1,8 +1,10 @@
 amqp==5.3.1
 asgiref==3.11.1
 astroid==4.0.4
+attrs==25.4.0
 billiard==4.2.4
 celery==5.5.0
+certifi==2026.2.25
 cfgv==3.5.0
 click==8.3.1
 click-didyoumean==0.3.1
@@ -21,12 +23,18 @@ django-extensions==4.1
 django-stubs==5.2.9
 django-stubs-ext==5.2.9
 django-timezone-field==7.2.1
+djangorestframework==3.16.1
+djangorestframework_simplejwt==5.5.1
+drf-spectacular==0.29.0
 filelock==3.25.0
 flower==2.0.1
 humanize==4.15.0
 identify==2.6.17
+inflection==0.5.1
 iniconfig==2.3.0
 isort==8.0.1
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
 kombu==5.5.4
 librt==0.8.1
 mccabe==0.7.0
@@ -42,6 +50,7 @@ prometheus_client==0.24.1
 prompt_toolkit==3.0.52
 psycopg2-binary==2.9.11
 Pygments==2.19.2
+PyJWT==2.11.0
 pylint==4.0.5
 pytest==9.0.2
 python-crontab==3.3.0
@@ -50,7 +59,10 @@ python-discovery==1.1.1
 pytz==2026.1.post1
 PyYAML==6.0.3
 redis==5.2.1
+referencing==0.37.0
+rpds-py==0.30.0
 ruff==0.15.5
+sentry-sdk==2.54.0
 six==1.17.0
 sqlparse==0.5.5
 tomlkit==0.14.0
@@ -59,6 +71,8 @@ types-PyYAML==6.0.12.20250915
 typing_extensions==4.15.0
 tzdata==2025.3
 tzlocal==5.3.1
+uritemplate==4.2.0
+urllib3==2.6.3
 vine==5.1.0
 virtualenv==21.1.0
 wcwidth==0.6.0
